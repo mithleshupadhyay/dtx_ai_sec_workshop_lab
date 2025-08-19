@@ -47,7 +47,7 @@ machine_type = "e2-standard-4"
 
 # basics
 disk_size_gb = 100
-prefix       = "emerson"
+prefix       = "ai_workshop"
 username     = "dtx"   # Makefile SSH targets assume this; keep in sync if you change it
 
 # network (start tight)
@@ -107,7 +107,7 @@ make ssh
 Welcome to Ubuntu 22.04.x LTS (GNU/Linux ... x86_64)
 ...
 Last login: ...
-dtx@emerson-dev-vm-1:~$
+dtx@ai_workshop-dev-vm-1:~$
 ```
 
 From the VM prompt, verify basics:
@@ -178,8 +178,8 @@ make workspace-show          # prints the current Terraform workspace (e.g., dev
 * SSH in and confirm the hostname includes the env, e.g.:
 
   ```
-  dtx@emerson-uat-vm-1:~$   # for UAT
-  dtx@emerson-prod-vm-1:~$  # for PROD
+  dtx@ai_workshop-uat-vm-1:~$   # for UAT
+  dtx@ai_workshop-prod-vm-1:~$  # for PROD
   ```
 * Optionally, expose the env via a file/tag you provision (e.g., `/etc/dtx_env`), then:
 
