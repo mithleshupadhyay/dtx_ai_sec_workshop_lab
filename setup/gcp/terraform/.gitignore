@@ -1,0 +1,41 @@
+id_ed25519*
+.terraform*
+
+# Terraform state
+*.tfstate
+*.tfstate.*
+*.backup
+
+# Terraform CLI lock file
+.terraform.lock.hcl
+
+# Terraform working directory
+.terraform/
+
+# Auto-generated variable files
+terraform.tfvars
+terraform.tfvars.json
+
+# Sensitive keys/scripts
+*.pem
+*.key
+*.pub
+id_ed25519
+id_ed25519.pub
+
+# Local scripts and output
+*.log
+*.bak
+*.tmp
+bootstrap.sh
+generate_ssh_key_and_update_tfvars.sh
+startup.sh.tpl.*
+
+# VS Code / JetBrains
+.vscode/
+.idea/
+
+# OS junk
+.DS_Store
+Thumbs.db
+.env
