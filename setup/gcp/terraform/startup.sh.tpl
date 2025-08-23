@@ -31,6 +31,7 @@ systemctl restart sshd
 apt-get update
 apt-get install -y \
   apt-transport-https \
+  gcc \
   ca-certificates \
   curl \
   gnupg \
@@ -65,7 +66,7 @@ sudo -u $USER bash -c 'bash -lc "
   source \$HOME/.local/bin/env
   uv tool install \"dtx[torch]>=0.26.0\"
   uv tool install \"garak\"
-  uv tool install \"textattack[tensorflow,optional]\"
+  uv tool install \"textattack[tensorflow]\"
   uv tool install \"huggingface_hub[cli,torch]\"
 "'
 
@@ -142,6 +143,11 @@ fi
 if [ -f "$HOME/.secrets/GROQ_API_KEY.txt" ]; then
   export GROQ_API_KEY=$(cat "$HOME/.secrets/GROQ_API_KEY.txt")
 fi
+
+if [ -f "$HOME/.secrets/HF_TOKEN.txt" ]; then
+  export HF_TOKEN=$(cat "$HOME/.secrets/HF_TOKEN.txt")
+fi
+
 EOF
 
 

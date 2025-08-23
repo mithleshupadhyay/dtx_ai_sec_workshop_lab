@@ -16,7 +16,7 @@ ssh_public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIYourKeyHere user@laptop"
 ssh_source_ranges = ["203.0.113.0/24"]  # Example: restrict to office IP range
 
 # --- Resource Naming ---
-prefix = "ai_workshop"
+prefix = "ai-workshop"
 
 # --- Ingress Ports to Allow ---
 allowed_ports = [22, 80, 443]
