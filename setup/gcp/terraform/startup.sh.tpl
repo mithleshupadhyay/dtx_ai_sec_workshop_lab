@@ -355,7 +355,7 @@ EOF
 # === Run demo apps ===
 INSTALL_DIR="/home/$USER/labs/dtx_ai_sec_workshop_lab/setup/scripts/tools"
 
-for script in install_finbot_ctf_demo.sh; do
+for script in install-finbot-ctf-demo.sh install-openai-cs-agents-demo.sh; do
   if [ -f "$INSTALL_DIR/$script" ]; then
     echo "🚀 Running $script"
     chmod +x "$INSTALL_DIR/$script"

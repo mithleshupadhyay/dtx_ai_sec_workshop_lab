@@ -1,0 +1,49 @@
+
+Create a script to install and run the demo app
+```
+Prompt:
+
+Create a bash installer script named install_<APP_NAME>.sh that:
+
+Ensures the directory ~/labs/webapps/ exists.
+
+Clones <REPO_URL> into ~/labs/webapps/<APP_NAME> (skip if the directory already exists).
+
+Uses uv to create a local .venv (default Python 3.12).
+
+Installs dependencies (prefer requirements.txt; if absent, and pyproject.toml exists, run uv pip install -e .).
+
+Ensures gunicorn is installed in the .venv if not already present.
+
+Generates an executable start.sh in the repo root that:
+
+Activates .venv.
+
+Exports PORT=<PORT> if PORT is not already set.
+
+Runs uv run gunicorn app:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120.
+
+Marks both scripts as executable and prints final usage instructions.
+
+Implementation details & constraints:
+
+Use set -euo pipefail.
+
+Support env overrides: BASE_DIR (default "$HOME/labs/webapps"), PYTHON_VERSION (default 3.12), APP_PORT (default <PORT>), CLONE_DIR (default <APP_NAME>).
+
+Preflight checks: require git and uv on PATH; exit with a helpful error if missing.
+
+If repo dir exists, skip cloning and continue install steps.
+
+After install, echo:
+
+Repo path, .venv path, start.sh path.
+
+How to start: cd ~/labs/webapps/<APP_NAME> && ./start.sh or PORT=<PORT> ./start.sh.
+
+Files to output:
+
+install_<APP_NAME>.sh
+
+start.sh (placed into ~/labs/webapps/<APP_NAME>/start.sh by the installer)
+```
