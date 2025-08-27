@@ -290,6 +290,80 @@ done
 chown dtx:dtx -R /home/$USER
 
 
+# === Create ~/.aisecurity venv and install core ML packages ===
+sudo -u "$USER" bash -lc '
+  set -e
+  source "$HOME/.local/bin/env" 2>/dev/null || true
+
+  PY_BIN=$( (uv python find 3.12 2>/dev/null) || command -v python3.12 || command -v python3 || echo python )
+  "$PY_BIN" -m venv "$HOME/.aisecurity"
+
+  source "$HOME/.aisecurity/bin/activate"
+  python -m pip install --upgrade pip
+  pip install --upgrade torch nltk transformers datasets
+  deactivate
+'
+
+# === Source the venv now and run the NLTK download script (if present) ===
+sudo -u "$USER" bash -lc '
+  set -e
+  if [ ! -d "$HOME/.aisecurity" ]; then
+    echo "~/.aisecurity venv not found"; exit 1
+  fi
+
+  DL_SCRIPT="$HOME/labs/dtx_ai_sec_workshop_lab/setup/scripts/tools/download_nltk.sh"
+  if [ -x "$DL_SCRIPT" ]; then
+    source "$HOME/.aisecurity/bin/activate"
+    "$DL_SCRIPT" || true
+    deactivate || true
+    touch "$HOME/.aisecurity/.nltk_downloaded" || true
+  else
+    echo "NLTK download script not found at $DL_SCRIPT"
+  fi
+'
+
+# === Add convenient aliases and a one-time bootstrap to .bashrc ===
+sudo -u "$USER" bash -lc '
+  # Aliases to "source" the aisecurity venv
+  if ! grep -q "activate_aisec" "$HOME/.bashrc"; then
+    cat >> "$HOME/.bashrc" << "EOF"
+# === ai-security helpers ===
+alias activate_aisec="source $HOME/.aisecurity/bin/activate"
+alias source_aisec="source $HOME/.aisecurity/bin/activate"
+alias source_aisecurity="source $HOME/.aisecurity/bin/activate"
+EOF
+  fi
+
+  # First-login NLTK bootstrap (runs once if not already done)
+  if ! grep -q ".nltk_downloaded" "$HOME/.bashrc"; then
+    cat >> "$HOME/.bashrc" << "EOF"
+
+# === ai-security NLTK bootstrap ===
+if [ -d "$HOME/.aisecurity" ] && [ ! -f "$HOME/.aisecurity/.nltk_downloaded" ]; then
+  if [ -x "$HOME/labs/dtx_ai_sec_workshop_lab/setup/scripts/tools/download_nltk.sh" ]; then
+    source "$HOME/.aisecurity/bin/activate"
+    "$HOME/labs/dtx_ai_sec_workshop_lab/setup/scripts/tools/download_nltk.sh" || true
+    deactivate || true
+    touch "$HOME/.aisecurity/.nltk_downloaded" || true
+  fi
+fi
+EOF
+  fi
+'
+
+
+# === Run demo apps ===
+INSTALL_DIR="/home/$USER/labs/dtx_ai_sec_workshop_lab/setup/scripts/tools"
+
+for script in install_finbot_ctf_demo.sh; do
+  if [ -f "$INSTALL_DIR/$script" ]; then
+    echo "🚀 Running $script"
+    chmod +x "$INSTALL_DIR/$script"
+    sudo -u "$USER" bash "$INSTALL_DIR/$script" || true
+  fi
+done
+
+
 # === Install Metasploit ===
 sudo -u $USER bash -c 'bash -lc "
   curl -sSL https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/templates/metasploit-framework-wrappers/msfupdate.erb > msfinstall

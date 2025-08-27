@@ -24,7 +24,8 @@ packages = [
     "wordnet",                         # WordNet (synonym constraints/transformations)
     "omw-1.4",                         # WordNet multilingual data
     "stopwords",                       # Stopword list
-    "universal_tagset"                 # tagset mapping used by some POS constraints
+    "universal_tagset",                 # tagset mapping used by some POS constraints
+    "punkt_tab"
 ]
 
 print(f"Downloading NLTK data to: {path}")
