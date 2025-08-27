@@ -22,14 +22,15 @@ This guide sets up the **DTX demo lab** using a **Simple Plug and Play VM** (no 
 * **OS:** Ubuntu Server 22.04 or 24.04 (x86\_64)
 * **Hardware (minimum):** **16 GB RAM**, **250+ GB disk**, **4+ vCPU**
 * **Tool:** `VirtualBox`
+* **Image:** [Kalki.ova](https://huggingface.co/datasets/detoxioai/dtx-ai-sec-lab/blob/main/kalki.ova)
 
 ---
 
 
 # Steps to Setup Labs:
 - Install Oracle Virtualbox
-- Download the ```Detoxio Labs.ova```
-- Open the ```Detoxio Labs.ova``` with Oracle VirtualBox ( It will started to import the labs )
+- Download the [Kalki.ova](https://huggingface.co/datasets/detoxioai/dtx-ai-sec-lab/blob/main/kalki.ova)
+- Open the ```Kalki.ova``` with Oracle VirtualBox ( It will started to import the labs )
 - Once Import is done, Set the configuration by press the setting
 - - **RAM:** 16GB RAM ( Min 8GB of RAM recommended ) 
 - - **HDD:** 250GB HDD ( Min 50GB of HDD recommended )
