@@ -26,20 +26,6 @@ else
   echo "✅ Repository already exists."
 fi
 
-# Create .env.template
-ENV_TEMPLATE="$BASE_DIR/.env.template"
-if [ ! -f "$ENV_TEMPLATE" ]; then
-  echo "📝 Creating .env.template"
-  cat > "$ENV_TEMPLATE" <<EOL
-# Environment configuration for Damn Vulnerable MCP Server
-
-# Port range to expose
-HOST_PORTS=9001-9010
-EOL
-else
-  echo "✅ .env.template already exists."
-fi
-
 
 # Build Docker image
 cd "$BASE_DIR/damn-vulnerable-MCP-server"
@@ -58,7 +44,7 @@ source "$BASE_DIR/.env"
 CONTAINER_NAME="dvmcp"
 IMAGE_NAME="dvmcp"
 
-echo "🚀 Starting container: $CONTAINER_NAME on ports $HOST_PORTS"
+echo "🚀 Starting container: $CONTAINER_NAME on ports 18567:18576"
 
 # Remove old container if exists
 if docker ps -a --format '{{.Names}}' | grep -Eq "^${CONTAINER_NAME}\$"; then
@@ -67,9 +53,9 @@ if docker ps -a --format '{{.Names}}' | grep -Eq "^${CONTAINER_NAME}\$"; then
   docker rm "$CONTAINER_NAME" || true
 fi
 
-docker run -d \
+docker run -d -restart unless-stopped \
   --name "$CONTAINER_NAME" \
-  -p "$HOST_PORTS:$HOST_PORTS" \
+  -p 18567-18576:"9001-9010\
   "$IMAGE_NAME"
 
 # Verify container is running
@@ -104,3 +90,26 @@ chmod +x "$STOP_SCRIPT"
 echo "✅ Installation complete!"
 echo "➡️ To start: $START_SCRIPT"
 echo "➡️ To stop:  $STOP_SCRIPT"
+
+echo "🚀 Starting container: $CONTAINER_NAME on ports 18567:18576"
+
+# Remove old container if exists
+if docker ps -a --format '{{.Names}}' | grep -Eq "^${CONTAINER_NAME}\$"; then
+  echo "⚠️ Container $CONTAINER_NAME already exists. Removing..."
+  docker stop "$CONTAINER_NAME" || true
+  docker rm "$CONTAINER_NAME" || true
+fi
+
+docker run -d -restart unless-stopped \
+  --name "$CONTAINER_NAME" \
+  -p 18567-18576:"9001-9010\
+  "$IMAGE_NAME"
+
+# Verify container is running
+sleep 2
+if docker ps --format '{{.Names}}' | grep -Eq "^${CONTAINER_NAME}\$"; then
+  echo "✅ Container $CONTAINER_NAME is running."
+else
+  echo "❌ Failed to start container $CONTAINER_NAME"
+  exit 1
+fi
