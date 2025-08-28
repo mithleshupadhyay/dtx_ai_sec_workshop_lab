@@ -3,7 +3,7 @@
 set -e
 
 # Variables
-BASE_DIR="/home/dtx/labs/webapp/mcp/damn"
+BASE_DIR="/home/dtx/labs/webapps/mcp/damn"
 REPO_URL="https://github.com/harishsg993010/damn-vulnerable-MCP-server.git"
 CONTAINER_NAME="dvmcp"
 IMAGE_NAME="dvmcp"
@@ -44,9 +44,9 @@ if docker ps -a --format '{{.Names}}' | grep -Eq "^${CONTAINER_NAME}\$"; then
   docker rm "$CONTAINER_NAME" || true
 fi
 
-docker run -d -restart unless-stopped \
+docker run -d \
   --name "$CONTAINER_NAME" \
-  -p 18567-18576:"9001-9010\
+  -p 18567-18576:9001-9010\
   "$IMAGE_NAME"
 
 # Verify container is running
