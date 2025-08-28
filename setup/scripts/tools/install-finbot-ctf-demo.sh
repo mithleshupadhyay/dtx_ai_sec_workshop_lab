@@ -7,7 +7,7 @@ set -euo pipefail
 
 # --- Config (override via env) ---
 BASE_DIR="${BASE_DIR:-labs/webapps}"
-REPO_URL="${REPO_URL:-https://github.com/OWASP-ASI/finbot-ctf-demo}"
+REPO_URL="${REPO_URL:-https://github.com/detoxio-ai/finbot-ctf-demo.git}"
 CLONE_DIR_NAME="${CLONE_DIR_NAME:-finbot-ctf-demo}"
 PYTHON_VERSION="${PYTHON_VERSION:-3.12}"
 APP_PORT="${APP_PORT:-10001}"
