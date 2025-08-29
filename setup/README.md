@@ -51,6 +51,7 @@ ANTHROPIC_API_KEY.txt  GROQ_API_KEY.txt  OPENAI_API_KEY.txt
 | **Autogen Studio** | Agent Workflow  | Web / CLI     | Visual multi-agent design & execution   |
 | Reaper             | Offensive AI   | Web (Docker)  | Real-world LLM exploitation & scanning |
 | CAI Framework       | Offensive AI   | CLI / Shell   | Autonomous multi-agent penetration testing |
+|DVMCP                | AI Red Team    | Web (Docker)  |  Deliberately vulnerable MCP server for red teaming and security training |
 
 ---
 
@@ -79,6 +80,7 @@ docker compose up -d
 | RAG Demo         | [http://IP_ADDRESS:17861](http://IP_ADDRESS:17861) |
 | Tool Agents Demo | [http://IP_ADDRESS:17862](http://IP_ADDRESS:17862) |
 | Text2SQL Demo    | [http://IP_ADDRESS:17863](http://IP_ADDRESS:17863) |
+| DVMCP Demo       | [http://IP_ADDRESS:18567-18576](http://IP_ADDRESS:18567-18576) |
 
 * Stop: `docker compose down`
 
@@ -396,6 +398,37 @@ Ctrl + C
 
 ---
 
+## 🧨 Damn Vulnerable Model Context Protocol (DVMCP)
+
+To start the server 
+
+```bash
+cd labs/webapps/mcp/damn
+docker run -d -restart unless-stopped --name dvmcp -p 18567-18576:9001-9010 dvmcp
+```
+
+To stop the server 
+
+```bash
+docker stop dvmcp
+```
+
+To debug in the server 
+
+```bash
+docker logs -f dvmcp
+```
+
+To run the server with clearing data
+
+```bash
+docker stop dvmcp
+docker rm dvmcp
+```
+
+---
+
+
 ## Validate the Installations 
 
 Run the following script and check the logs
@@ -431,5 +464,6 @@ Optional: logs to file and stdout
 | Reaper             | `docker compose up -d`          | `http://IP_ADDRESS:18000`       |
 | **AI Red Teaming Playground Labs** | `~/labs/webapps/AI-Red-Teaming-Playground-Labs/start.sh` / `stop.sh` | `http://IP_ADDRESS:15000` (login via `?auth=...`) |
 Labs launch on http://IP_ADDRESS:4001 … http://IP_ADDRESS:4012
+| Reaper             | `docker run -d -restart unless-stopped --name dvmcp -p 18567-18576:9001-9010 dvmcp `          | `http://IP_ADDRESS:18000`       |
 
 
