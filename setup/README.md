@@ -462,6 +462,8 @@ Optional: logs to file and stdout
 | llm                | `llm "your prompt"`             | Terminal response / chat mode |
 | **Autogen Studio** | `autogenstudio ui --port 18081` | `http://IP_ADDRESS:18081`      |
 | Reaper             | `docker compose up -d`          | `http://IP_ADDRESS:18000`       |
+| **AI Red Teaming Playground Labs** | `~/labs/webapps/AI-Red-Teaming-Playground-Labs/start.sh` / `stop.sh` | `http://IP_ADDRESS:15000` (login via `?auth=...`) |
+Labs launch on http://IP_ADDRESS:4001 … http://IP_ADDRESS:4012
 | Reaper             | `docker run -d -restart unless-stopped --name dvmcp -p 18567-18576:9001-9010 dvmcp `          | `http://IP_ADDRESS:18000`       |
 
 
