@@ -13,7 +13,7 @@ set -euo pipefail
 
 # --- Config (override via env) ---
 BASE_DIR="${BASE_DIR:-labs/webapps}"
-REPO_URL="${REPO_URL:-https://github.com/detoxio-ai/AI-Red-Teaming-Playground-Labs.git}"
+REPO_URL="${REPO_URL:-https://github.com/mithleshupadhyay/AI-Red-Teaming-Playground-Labs.git}"
 CLONE_DIR_NAME="${CLONE_DIR_NAME:-AI-Red-Teaming-Playground-Labs}"
 APP_PORT="${APP_PORT:-15000}"
 
@@ -45,11 +45,14 @@ fi
 cd "${CLONE_DIR_NAME}"
 
 # --- Build .env ---
+# env var wins; fallback to file
 OPENAI_FILE="$HOME/.secrets/OPENAI_API_KEY.txt"
-if [[ -f "$OPENAI_FILE" ]]; then
+if [[ -n "${OPENAI_API_KEY:-}" ]]; then
+  OPENAI_API_KEY_VAL="$OPENAI_API_KEY"
+elif [[ -f "$OPENAI_FILE" ]]; then
   OPENAI_API_KEY_VAL="$(<"$OPENAI_FILE")"
 else
-  OPENAI_API_KEY_VAL="${OPENAI_API_KEY:-}"
+  OPENAI_API_KEY_VAL=""
 fi
 
 genhex() {
@@ -66,6 +69,7 @@ genhex() {
 
 AUTH_KEY_VAL="${AUTH_KEY:-$(genhex)}"
 SECRET_KEY_VAL="${SECRET_KEY:-$(genhex)}"
+PUBLIC_HOST_VAL="${PUBLIC_HOST:-}"
 
 cat > .env <<EOF
 # ---- OpenAI (standard API) ----
@@ -79,6 +83,9 @@ SECRET_KEY=${SECRET_KEY_VAL}
 
 # ---- Host port for Home UI (container is 5000) ----
 APP_PORT=${APP_PORT}
+
+# ---- Optional public host for links (if empty, start.sh prints localhost) ----
+PUBLIC_HOST=${PUBLIC_HOST_VAL}
 EOF
 
 echo "Wrote .env with APP_PORT=${APP_PORT}"
@@ -89,23 +96,28 @@ cat > start.sh <<'EOF'
 set -euo pipefail
 cd "$(dirname "$0")"
 
-# Load .env so APP_PORT/AUTH_KEY are available to docker compose and for printing
-set -a
-[ -f .env ] && . ./.env
-set +a
+# Read values needed for printing/overrides (don't export .env into the process)
+APP_PORT_FILE="$(grep -E '^APP_PORT=' .env | cut -d= -f2- | tr -d '\r' || true)"
+PUBLIC_HOST_FILE="$(grep -E '^PUBLIC_HOST=' .env | cut -d= -f2- | tr -d '\r' || true)"
+AUTH_KEY="$(grep -E '^AUTH_KEY=' .env | cut -d= -f2- | tr -d '\r' || true)"
 
 # Allow override at invocation: PORT=16000 ./start.sh
-export APP_PORT="${PORT:-${APP_PORT:-15000}}"
+# Precedence: PORT env > existing APP_PORT env > .env value > 15000
+export APP_PORT="${PORT:-${APP_PORT:-${APP_PORT_FILE:-15000}}}"
 
-# Bring up the stack (compose reads .env automatically)
+# Bring up the stack
+# - docker compose reads .env automatically for substitutions
+# - any exported env (e.g., OPENAI_API_KEY) overrides .env
 docker compose -f docker-compose-openai.yaml up -d
 
-# Print login URL
-AUTH_KEY="$(grep -E '^AUTH_KEY=' .env | cut -d= -f2- | tr -d '\r' || true)"
+# Compose done — print login URL
+HOST_FOR_LINK="${PUBLIC_HOST:-${PUBLIC_HOST_FILE:-localhost}}"
+LOGIN_URL="http://${HOST_FOR_LINK}:${APP_PORT}/login?auth=${AUTH_KEY}"
+
 echo ""
 echo "✅ Playground up. Login:"
-echo "   http://localhost:${APP_PORT}/login?auth=${AUTH_KEY}"
-echo "   (Challenges spawn on ports like 4001–4012)"
+echo "   ${LOGIN_URL}"
+echo "   (Challenges spawn on ports like 14001–14012)"
 echo ""
 EOF
 chmod +x start.sh
