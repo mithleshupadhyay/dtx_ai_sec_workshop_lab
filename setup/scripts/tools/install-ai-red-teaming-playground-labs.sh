@@ -13,7 +13,7 @@ set -euo pipefail
 
 # --- Config (override via env) ---
 BASE_DIR="${BASE_DIR:-labs/webapps}"
-REPO_URL="${REPO_URL:-https://github.com/mithleshupadhyay/AI-Red-Teaming-Playground-Labs.git}"
+REPO_URL="${REPO_URL:-https://github.com/detoxio-ai/AI-Red-Teaming-Playground-Labs.git}"
 CLONE_DIR_NAME="${CLONE_DIR_NAME:-AI-Red-Teaming-Playground-Labs}"
 APP_PORT="${APP_PORT:-15000}"
 

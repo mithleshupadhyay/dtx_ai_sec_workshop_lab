@@ -128,11 +128,11 @@ fi
 # === AI Red Teaming Playground Labs ===
 if cd "$HOME/labs/webapps/AI-Red-Teaming-Playground-Labs" 2>/dev/null; then
   log "🚀 Starting AI Red Teaming Playground Labs..."
-  log "$(docker compose -f docker-compose-openai.yaml -f docker-compose.port-override.yaml up -d 2>&1)" || true
+  log "$(./start.sh 2>&1)" || true
   sleep 5
   check_url "Playground Home (localhost)" "http://localhost:15000" || true
   log "🛑 Stopping Playground..."
-  log "$(docker compose -f docker-compose-openai.yaml -f docker-compose.port-override.yaml down 2>&1)" || true
+  log "$(docker compose -f docker-compose-openai.yaml down 2>&1)" || true
 else
   log "ℹ️ Playground not installed; skipping."
 fi
